@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Home')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+
+<section class="hero iconsi-hero">
+    <div class="hero-media"><img th:src="@{/images/iconsi_campaign_studio.webp}" alt="Two models in ICONSI Cream Statement and navy tees"></div>
+    <div class="hero-copy">
+        <p class="eyebrow">ICONSI / The graphic tee collection</p>
+        <h1>Wear your <span class="thin">presence.</span></h1>
+        <p class="lead">Graphic T-shirts with a point of view.<br>Made for the moments when you show up as yourself.</p>
+        <div class="hero-cta">
+            <a class="btn btn-primary" href="#collection">Shop the tees ↗</a>
+            <a class="btn btn-ghost" href="#campaign">Explore campaign</a>
+        </div>
+    </div>
+    <a class="scroll-cue" href="#collection">Scroll</a>
+</section>
+
+<div class="band iconsi-band"><div class="band-track"><span>ICONSI　✳　Own your presence　✳　Graphic tees　✳　ICONSI　✳　</span><span>ICONSI　✳　Own your presence　✳　Graphic tees　✳　ICONSI　✳　</span></div></div>
+
+<section class="section iconsi-collection" id="collection">
+    <div class="section-head"><div><p class="eyebrow">01 / The collection</p><h2>Choose your colour.</h2><p class="section-sub">One name. Different energy. Find the tee that feels like you.</p></div><a th:href="@{/products(category='tees')}">Shop all tees ↗</a></div>
+    <!-- Live catalogue cards: names, prices and quick-add come from the products table. -->
+    <div class="grid iconsi-colourways">
+        <th:block th:each="p : ${featured}"><div th:replace="~{fragments/layout :: card(${p})}"></div></th:block>
+    </div>
+</section>
+
+<section class="campaign section" id="campaign">
+    <div class="campaign-image reveal"><img th:src="@{/images/iconsi_tee_varsity_orange.webp}" alt="Model in a navy ICONSI tee with an orange varsity wordmark" loading="lazy"></div>
+    <div class="campaign-copy reveal"><p class="eyebrow">02 / The idea</p><h2>Not made to <span>blend in.</span></h2><p>Bold type. Good colour. Your own attitude. The tee that says something.</p><a class="btn btn-primary" th:href="@{/products(category='tees')}">Find your tee ↗</a></div>
+</section>
+
+<section class="section showcase-section iconsi-edit" id="edit">
+    <div class="section-head"><div><p class="eyebrow">03 / The edit</p><h2>The tee, reimagined.</h2></div></div>
+    <div class="showcase reveal" id="showcase">
+        <div class="sc-slides">
+            <article class="sc-slide is-active"><a class="sc-media" th:href="@{/products(category='tees')}"><img th:src="@{/images/iconsi_tee_blackout_alt.webp}" alt="Model in the washed-black ICONSI Blackout tee"></a><div class="sc-copy"><p class="eyebrow">01 / After dark</p><h3>One word. All presence.</h3><p class="sc-desc">Washed black, one graphic, all presence. The tee that does the talking.</p><a class="btn btn-primary" th:href="@{/products(category='tees')}">Shop black tees ↗</a></div></article>
+            <article class="sc-slide"><a class="sc-media" th:href="@{/products(category='tees')}"><img th:src="@{/images/iconsi_tee_varsity_orange.webp}" alt="Model in an original ICONSI varsity tee with burnt-orange lettering"></a><div class="sc-copy"><p class="eyebrow">02 / Varsity type</p><h3>Make a statement.</h3><p class="sc-desc">A bold, dimensional ICONSI wordmark brings collegiate energy into the collection.</p><a class="btn btn-primary" th:href="@{/products(category='tees')}">Explore the edit ↗</a></div></article>
+            <article class="sc-slide"><a class="sc-media" th:href="@{/products(category='tees')}"><img th:src="@{/images/iconsi_tee_cobalt.webp}" alt="Model in the ICONSI Cobalt tee"></a><div class="sc-copy"><p class="eyebrow">03 / Colour pop</p><h3>Cobalt energy.</h3><p class="sc-desc">Saturated blue, one cream wordmark. Made to be seen from across the street.</p><a class="btn btn-primary" th:href="@{/products(category='tees')}">Shop colour tees ↗</a></div></article>
+        </div>
+        <button class="sc-arrow sc-prev" aria-label="Previous slide">←</button><button class="sc-arrow sc-next" aria-label="Next slide">→</button>
+        <div class="sc-dots" role="tablist"><button class="sc-dot is-active" aria-label="Slide 1"></button><button class="sc-dot" aria-label="Slide 2"></button><button class="sc-dot" aria-label="Slide 3"></button></div>
+    </div>
+</section>
+
+<section class="lookbook iconsi-lookbook" id="lookbook">
+    <div class="section-head light"><div><p class="eyebrow">04 / The lookbook</p><h2>Out in the world.</h2></div><a th:href="@{/products(category='tees')}">Shop the tees ↗</a></div>
+    <div class="lookbook-grid iconsi-lookbook-grid">
+        <a class="look reveal look-feature" th:href="@{/products(category='tees')}"><img th:src="@{/images/iconsi_tee_forest.webp}" alt="Model in the ICONSI Forest tee" loading="lazy"><div class="look-cap"><span class="look-idx">01</span><span class="look-meta"><span class="look-title">Own your presence</span><span class="look-tag">Forest</span></span></div></a>
+        <a class="look reveal fox-reference" href="https://commons.wikimedia.org/wiki/File:Johannesburg_Fox_Street_01.jpg" target="_blank" rel="noopener"><img th:src="@{/images/fox_street_johannesburg.webp}" alt="Fox Street in Johannesburg, photographed by Adamina" loading="lazy"><div class="look-cap"><span class="look-idx">02</span><span class="look-meta"><span class="look-title">Fox Street, Joburg</span><span class="look-tag">City frame</span></span></div></a>
+        <a class="look reveal" th:href="@{/products(category='tees')}"><img th:src="@{/images/iconsi_tee_blackout.webp}" alt="Model in the ICONSI Blackout tee" loading="lazy"><div class="look-cap"><span class="look-idx">03</span><span class="look-meta"><span class="look-title">After dark</span><span class="look-tag">Blackout</span></span></div></a>
+        <a class="look reveal" th:href="@{/products(category='tees')}"><img th:src="@{/images/iconsi_tee_cobalt.webp}" alt="Model in the ICONSI Cobalt tee" loading="lazy"><div class="look-cap"><span class="look-idx">04</span><span class="look-meta"><span class="look-title">Everyday, your way</span><span class="look-tag">Cobalt</span></span></div></a>
+    </div>
+    <p class="photo-credit">Fox Street photo: <a href="https://commons.wikimedia.org/wiki/File:Johannesburg_Fox_Street_01.jpg" target="_blank" rel="noopener">Adamina</a> · <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener">CC BY 2.0</a>.</p>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

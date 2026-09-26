@@ -1,0 +1,27 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Database is external (Neon serverless Postgres). Render only runs the web
+# service; you supply the Neon connection details as the secret env vars below.
+
+services:
+  - type: web
+    name: iconsi-store
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      # --- Neon Postgres (paste when Render prompts) ---
+      - key: DATABASE_URL
+        sync: false          # jdbc:postgresql://<neon-host>/<db>?sslmode=require
+      - key: DATABASE_USER
+        sync: false          # your Neon role (e.g. neondb_owner)
+      - key: DATABASE_PASSWORD
+        sync: false
+      # --- First admin account, created once on boot ---
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Admin · Product')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<section class="section narrow">
+    <div class="section-head">
+        <h2 th:text="${product.id == null} ? 'New product' : 'Edit product'">Product</h2>
+    </div>
+
+    <form class="checkout-form" th:action="@{/admin/products/save}" method="post" th:object="${product}">
+        <input type="hidden" th:field="*{id}">
+        <input type="hidden" th:field="*{createdAt}">
+        <label>Name <input type="text" th:field="*{name}" required></label>
+        <label>Category <input type="text" th:field="*{category}"></label>
+        <label>Description
+            <textarea th:field="*{description}" rows="4"></textarea></label>
+        <div class="row">
+            <label>Price (R) <input type="number" step="0.01" th:field="*{price}" required></label>
+            <label>Stock <input type="number" th:field="*{stock}"></label>
+        </div>
+        <label>Image URLs (comma-separated)
+            <input type="text" th:field="*{imageUrls}"
+                   placeholder="https://picsum.photos/seed/x/800/1000, ..."></label>
+        <label class="checkbox">
+            <input type="checkbox" th:field="*{active}"> Active (visible in shop)</label>
+
+        <div class="row">
+            <button class="btn btn-primary" type="submit">Save</button>
+            <a class="btn btn-ghost" th:href="@{/admin/products}">Cancel</a>
+        </div>
+    </form>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

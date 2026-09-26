@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Admin')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<section class="section narrow">
+    <div class="section-head"><h2>Admin dashboard</h2></div>
+
+    <nav class="admin-tabs">
+        <a class="chip chip-active" th:href="@{/admin}">Dashboard</a>
+        <a class="chip" th:href="@{/admin/products}">Products</a>
+        <a class="chip" th:href="@{/admin/orders}">Orders</a>
+    </nav>
+
+    <div class="stat-row">
+        <div class="stat">
+            <span class="stat-num" th:text="${productCount}">0</span>
+            <span class="stat-label">Products</span>
+        </div>
+        <div class="stat">
+            <span class="stat-num" th:text="${orderCount}">0</span>
+            <span class="stat-label">Orders</span>
+        </div>
+    </div>
+
+    <h3>Recent orders</h3>
+    <p th:if="${orderList.isEmpty()}" class="empty">No orders yet.</p>
+    <table class="cart-table" th:unless="${orderList.isEmpty()}">
+        <thead><tr><th>Order</th><th>Customer</th><th>Status</th><th>Total</th></tr></thead>
+        <tbody>
+        <tr th:each="o : ${orderList}">
+            <td th:text="'#' + ${o.id}">#1</td>
+            <td th:text="${o.recipientName}">name</td>
+            <td><span class="status" th:text="${o.status}">RECEIVED</span></td>
+            <td th:text="'R ' + ${#numbers.formatDecimal(o.total,1,2)}">R 0.00</td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

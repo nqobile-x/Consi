@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Shop')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<section class="section">
+    <div class="section-head">
+        <h2>Shop</h2>
+    </div>
+
+    <div class="filters">
+        <a th:href="@{/products}" class="chip"
+           th:classappend="${activeCategory == null} ? 'chip-active' : ''">All</a>
+        <a th:each="c : ${categories}" th:href="@{/products(category=${c})}"
+           class="chip" th:text="${c}"
+           th:classappend="${activeCategory == c} ? 'chip-active' : ''">Category</a>
+    </div>
+
+    <div class="grid" th:if="${!products.isEmpty()}">
+        <th:block th:each="p : ${products}">
+            <div th:replace="~{fragments/layout :: card(${p})}"></div>
+        </th:block>
+    </div>
+
+    <p th:if="${products.isEmpty()}" class="empty">No products in this category yet.</p>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Create account')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<section class="auth-wrap">
+    <div class="auth-card reveal">
+        <h2>Create account</h2>
+
+        <form th:action="@{/auth/register}" method="post" th:object="${form}">
+            <label>Full name
+                <input type="text" th:field="*{fullName}" required>
+                <span class="field-error" th:if="${#fields.hasErrors('fullName')}"
+                      th:errors="*{fullName}">error</span>
+            </label>
+            <label>Email
+                <input type="email" th:field="*{email}" required>
+                <span class="field-error" th:if="${#fields.hasErrors('email')}"
+                      th:errors="*{email}">error</span>
+            </label>
+            <label>Password
+                <input type="password" th:field="*{password}" required>
+                <span class="field-error" th:if="${#fields.hasErrors('password')}"
+                      th:errors="*{password}">error</span>
+            </label>
+            <button class="btn btn-primary" type="submit">Create account</button>
+        </form>
+
+        <p class="auth-alt">Already have an account?
+            <a th:href="@{/auth/login}">Sign in</a></p>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

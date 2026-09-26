@@ -1,0 +1,35 @@
+name: keep-alive
+
+# Pings the deployed site so a free Render web service never idles into sleep.
+# Set the repo variable SITE_URL to your Render URL:
+#   GitHub repo → Settings → Secrets and variables → Actions → Variables →
+#   New repository variable → name SITE_URL, value https://iconsi-store.onrender.com
+# Until SITE_URL is set, the job no-ops (it won't fail).
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"   # every 10 minutes (GitHub's minimum is 5)
+  workflow_dispatch:          # lets you run it manually from the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping site
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: |
+          if [ -z "$SITE_URL" ]; then
+            echo "SITE_URL not set yet — skipping. Add it as a repo variable to enable pings."
+            exit 0
+          fi
+          echo "Pinging $SITE_URL"
+          # --max-time 180 so a ping that lands during a cold JVM start (~100s+)
+          # waits it out instead of timing out; keeps the idle timer reset.
+          code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 180 "$SITE_URL" || echo "000")
+          echo "HTTP $code"
+          # 2xx/3xx means awake; anything else just logs (don't fail the schedule).
+          case "$code" in
+            2*|3*) echo "Site is awake." ;;
+            *) echo "Non-OK ($code) — it may be cold-starting; will retry next run." ;;
+          esac

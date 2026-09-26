@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('My account')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<section class="section narrow">
+    <div class="section-head"><h2>My account</h2></div>
+
+    <div class="account-card">
+        <p><strong>Name:</strong> <span th:text="${user.fullName}">Name</span></p>
+        <p><strong>Email:</strong> <span th:text="${user.email}">email</span></p>
+        <p><strong>Role:</strong> <span th:text="${user.role}">USER</span></p>
+    </div>
+
+    <h3>Order history</h3>
+    <p th:if="${orders.isEmpty()}" class="empty">No orders yet.
+        <a th:href="@{/products}">Start shopping →</a></p>
+
+    <table class="cart-table" th:unless="${orders.isEmpty()}">
+        <thead><tr><th>Order</th><th>Date</th><th>Status</th><th>Total</th><th></th></tr></thead>
+        <tbody>
+        <tr th:each="o : ${orders}">
+            <td th:text="'#' + ${o.id}">#1</td>
+            <td th:text="${#strings.substring(o.createdAt.toString(),0,10)}">date</td>
+            <td><span class="status" th:text="${o.status}">RECEIVED</span></td>
+            <td th:text="'R ' + ${#numbers.formatDecimal(o.total,1,2)}">R 0.00</td>
+            <td><a th:href="@{/account/orders/{id}(id=${o.id})}">View</a></td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

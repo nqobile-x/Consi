@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Progressive enhancement: reveal-animations only apply when JS is on.
+         External (not inline) so the CSP can forbid inline scripts. -->
+    <script th:src="@{/js/init.js}"></script>
+    <title th:text="${title} + ' · ' + ${brandName}">Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,700;125,800;125,900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- ===== Announcement marquee ===== -->
+<div th:fragment="navbar">
+<!-- Cinematic load-in intro (plays once per session) -->
+<div class="loader" id="loader" aria-hidden="true">
+    <div class="loader-lockup">
+        <span class="loader-kicker">Joburg / Graphic tees</span>
+        <span class="loader-brand" th:text="${brandName}">ICONSI</span>
+        <span class="loader-tagline">Own your presence.</span>
+        <div class="loader-progress" aria-hidden="true"><span id="loaderProgress"></span></div>
+    </div>
+    <div class="loader-counter"><span class="loader-count" id="loaderCount">000</span><span class="loader-status">Loading the collection</span></div>
+</div>
+<div class="announce">
+    <div class="announce-track">
+        <span th:each="i : ${#numbers.sequence(1,8)}">ICONSI graphic tees &nbsp;✳&nbsp; Own your presence &nbsp;✳&nbsp; New colourways &nbsp;✳&nbsp;</span>
+    </div>
+</div>
+
+<!-- ===== Navbar ===== -->
+<header class="nav" id="nav">
+    <div class="nav-inner">
+        <a class="brand" th:href="@{/}" th:text="${brandName}">Iconsi</a>
+        <nav class="nav-links">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/products(category='tees')}">The tees</a>
+            <a th:href="@{/} + '#campaign'">Campaign</a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin}">Admin</a>
+        </nav>
+        <div class="nav-actions">
+            <a class="cart-link" th:href="@{/cart}">
+                Cart <span class="badge" th:if="${cartCount > 0}" th:text="${cartCount}">0</span>
+            </a>
+            <a sec:authorize="isAnonymous()" th:href="@{/auth/login}">Sign in</a>
+            <a sec:authorize="isAuthenticated()" th:href="@{/account}">Account</a>
+            <form sec:authorize="isAuthenticated()" th:action="@{/auth/logout}" method="post" class="inline">
+                <button class="link-btn" type="submit">Sign out</button>
+            </form>
+        </div>
+    </div>
+</header>
+</div>
+
+<!-- ===== Reusable product card (hover-reveal + quick add) ===== -->
+<article th:fragment="card(product)" class="card reveal">
+    <a class="card-img slot" th:href="@{/products/{id}(id=${product.id})}"
+       th:attr="data-tee=${#strings.toLowerCase(#strings.replace(product.name, 'ICONSI ', ''))}">
+        <img class="img-front" th:src="${product.primaryImage}" th:alt="${product.name}" loading="lazy">
+        <img class="img-back" th:if="${product.imageList.length > 1}"
+             th:src="${product.imageList[1]}" alt="" loading="lazy">
+        <span class="soldout" th:if="${product.stock == 0}">Sold out</span>
+        <span class="tag" th:if="${product.category != null}" th:text="${product.category}">tag</span>
+    </a>
+    <form th:if="${product.stock > 0}" th:action="@{/cart/add}" method="post" class="quick-add">
+        <input type="hidden" name="productId" th:value="${product.id}">
+        <input type="hidden" name="quantity" value="1">
+        <button type="submit">Quick add +</button>
+    </form>
+    <a class="card-body" th:href="@{/products/{id}(id=${product.id})}">
+        <span class="card-name" th:text="${product.name}">Product</span>
+        <span class="card-price" th:text="'R ' + ${#numbers.formatDecimal(product.price,1,2)}">R 0.00</span>
+    </a>
+</article>
+
+<!-- ===== Footer ===== -->
+<footer th:fragment="footer" class="footer">
+    <div class="footer-cta reveal">
+        <h2>Join the list</h2>
+        <p>Be first to new colourways and campaign drops.</p>
+        <form class="newsletter" id="newsletter">
+            <input type="email" placeholder="you@example.com" aria-label="Email" required>
+            <button class="btn btn-primary" type="submit">Subscribe</button>
+        </form>
+    </div>
+    <div class="footer-inner">
+        <div>
+            <div class="brand" th:text="${brandName}">Iconsi</div>
+            <p th:text="${tagline}">Bold graphic tees, made in Joburg for the world.</p>
+        </div>
+        <div class="footer-cols">
+            <div>
+                <h4>Shop</h4>
+                <a th:href="@{/products}">The tees</a>
+                <a th:href="@{/cart}">Cart</a>
+            </div>
+            <div>
+                <h4>Account</h4>
+                <a th:href="@{/account}">My account</a>
+                <a th:href="@{/auth/login}">Sign in</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-legal">
+        <span>© <span th:text="${#dates.year(#dates.createNow())}">2026</span>
+              <span th:text="${brandName}">ICONSI</span>. Joburg builds bolder.</span>
+    </div>
+    <script th:src="@{/js/app.js}" defer></script>
+</footer>
+
+</body>
+</html>

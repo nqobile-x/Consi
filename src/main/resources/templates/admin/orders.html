@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Admin · Orders')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<section class="section narrow">
+    <div class="section-head"><h2>Orders</h2></div>
+
+    <nav class="admin-tabs">
+        <a class="chip" th:href="@{/admin}">Dashboard</a>
+        <a class="chip" th:href="@{/admin/products}">Products</a>
+        <a class="chip chip-active" th:href="@{/admin/orders}">Orders</a>
+    </nav>
+
+    <p th:if="${orders.isEmpty()}" class="empty">No orders yet.</p>
+
+    <table class="cart-table" th:unless="${orders.isEmpty()}">
+        <thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th></tr></thead>
+        <tbody>
+        <tr th:each="o : ${orders}">
+            <td th:text="'#' + ${o.id}">#1</td>
+            <td th:text="${o.recipientName}">name</td>
+            <td th:text="'R ' + ${#numbers.formatDecimal(o.total,1,2)}">R 0.00</td>
+            <td>
+                <form th:action="@{/admin/orders/{id}/status(id=${o.id})}" method="post" class="qty-form">
+                    <select name="status">
+                        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"
+                                th:selected="${s == o.status}">status</option>
+                    </select>
+                    <button class="link-btn" type="submit">Update</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Admin · Products')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<section class="section narrow">
+    <div class="section-head"><h2>Products</h2></div>
+
+    <nav class="admin-tabs">
+        <a class="chip" th:href="@{/admin}">Dashboard</a>
+        <a class="chip chip-active" th:href="@{/admin/products}">Products</a>
+        <a class="chip" th:href="@{/admin/orders}">Orders</a>
+    </nav>
+
+    <a class="btn btn-primary" th:href="@{/admin/products/new}">+ New product</a>
+
+    <table class="cart-table">
+        <thead><tr><th></th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Active</th><th></th></tr></thead>
+        <tbody>
+        <tr th:each="p : ${products}">
+            <td><img class="mini-thumb" th:src="${p.primaryImage}" alt=""></td>
+            <td th:text="${p.name}">Name</td>
+            <td th:text="${p.category}">cat</td>
+            <td th:text="'R ' + ${#numbers.formatDecimal(p.price,1,2)}">R 0.00</td>
+            <td th:text="${p.stock}">0</td>
+            <td th:text="${p.active} ? 'Yes' : 'No'">Yes</td>
+            <td class="row-actions">
+                <a th:href="@{/admin/products/{id}/edit(id=${p.id})}">Edit</a>
+                <form th:action="@{/admin/products/{id}/delete(id=${p.id})}" method="post" class="inline">
+                    <button class="link-btn danger" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

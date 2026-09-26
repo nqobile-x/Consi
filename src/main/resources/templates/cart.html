@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Cart')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<section class="section narrow">
+    <div class="section-head"><h2>Your cart</h2></div>
+
+    <p th:if="${cart.empty}" class="empty">
+        Your cart is empty. <a th:href="@{/products}">Start shopping →</a>
+    </p>
+
+    <div th:unless="${cart.empty}">
+        <table class="cart-table">
+            <thead>
+            <tr><th>Item</th><th>Price</th><th>Qty</th><th>Total</th><th></th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="line : ${cart.lines}">
+                <td class="cart-item">
+                    <img th:src="${line.image}" th:alt="${line.name}">
+                    <span th:text="${line.name}">Item</span>
+                </td>
+                <td th:text="'R ' + ${#numbers.formatDecimal(line.price,1,2)}">R 0.00</td>
+                <td>
+                    <form th:action="@{/cart/update}" method="post" class="qty-form">
+                        <input type="hidden" name="productId" th:value="${line.productId}">
+                        <input type="number" name="quantity" th:value="${line.quantity}" min="0">
+                        <button class="link-btn" type="submit">Update</button>
+                    </form>
+                </td>
+                <td th:text="'R ' + ${#numbers.formatDecimal(line.lineTotal,1,2)}">R 0.00</td>
+                <td>
+                    <form th:action="@{/cart/remove}" method="post">
+                        <input type="hidden" name="productId" th:value="${line.productId}">
+                        <button class="link-btn danger" type="submit">Remove</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="cart-summary">
+            <div class="subtotal">
+                <span>Subtotal</span>
+                <strong th:text="'R ' + ${#numbers.formatDecimal(cart.subtotal,1,2)}">R 0.00</strong>
+            </div>
+            <a class="btn btn-primary" th:href="@{/checkout}">Proceed to checkout</a>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

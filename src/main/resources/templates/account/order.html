@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Order')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<section class="section narrow">
+    <p class="alert ok" th:if="${param.placed}">Thanks! Your order has been placed.</p>
+
+    <div class="section-head">
+        <h2 th:text="'Order #' + ${order.id}">Order</h2>
+    </div>
+
+    <div class="account-card">
+        <p><strong>Status:</strong> <span class="status" th:text="${order.status}">RECEIVED</span></p>
+        <p><strong>Placed:</strong>
+            <span th:text="${#strings.substring(order.createdAt.toString(),0,10)}">date</span></p>
+        <p><strong>Ship to:</strong>
+            <span th:text="${order.recipientName}">Name</span>,
+            <span th:text="${order.line1}">line1</span>,
+            <span th:text="${order.city}">city</span>,
+            <span th:text="${order.country}">country</span></p>
+    </div>
+
+    <table class="cart-table">
+        <thead><tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead>
+        <tbody>
+        <tr th:each="item : ${order.items}">
+            <td class="cart-item">
+                <img th:if="${item.product != null}" th:src="${item.product.primaryImage}" alt="">
+                <span th:text="${item.product != null ? item.product.name : 'Item'}">Item</span>
+            </td>
+            <td th:text="${item.quantity}">1</td>
+            <td th:text="'R ' + ${#numbers.formatDecimal(item.priceAtPurchase,1,2)}">R 0.00</td>
+            <td th:text="'R ' + ${#numbers.formatDecimal(item.lineTotal,1,2)}">R 0.00</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="cart-summary">
+        <div class="subtotal">
+            <span>Total</span>
+            <strong th:text="'R ' + ${#numbers.formatDecimal(order.total,1,2)}">R 0.00</strong>
+        </div>
+        <a class="btn btn-ghost" th:href="@{/account}">← Back to account</a>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

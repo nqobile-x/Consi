@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Checkout')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: navbar}"></header>
+
+<section class="section narrow">
+    <div class="section-head"><h2>Checkout</h2></div>
+
+    <div class="checkout">
+        <form class="checkout-form" th:action="@{/checkout}" method="post" th:object="${order}">
+            <h3>Shipping details</h3>
+            <label>Recipient name
+                <input type="text" th:field="*{recipientName}" required></label>
+            <label>Phone
+                <input type="text" th:field="*{phone}"></label>
+            <label>Address line 1
+                <input type="text" th:field="*{line1}" required></label>
+            <label>Address line 2
+                <input type="text" th:field="*{line2}"></label>
+            <div class="row">
+                <label>City <input type="text" th:field="*{city}" required></label>
+                <label>Province <input type="text" th:field="*{province}"></label>
+            </div>
+            <div class="row">
+                <label>Postal code <input type="text" th:field="*{postalCode}"></label>
+                <label>Country <input type="text" th:field="*{country}" required></label>
+            </div>
+
+            <p class="note">Payment is stubbed in this template — placing the order
+                records it immediately. Wire in a payment gateway to go live.</p>
+            <button class="btn btn-primary" type="submit">Place order</button>
+        </form>
+
+        <aside class="order-summary reveal">
+            <h3>Order summary</h3>
+            <div class="summary-line" th:each="line : ${cart.lines}">
+                <span th:text="${line.name} + ' × ' + ${line.quantity}">Item</span>
+                <span th:text="'R ' + ${#numbers.formatDecimal(line.lineTotal,1,2)}">R 0.00</span>
+            </div>
+            <div class="summary-total">
+                <span>Total</span>
+                <strong th:text="'R ' + ${#numbers.formatDecimal(cart.subtotal,1,2)}">R 0.00</strong>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

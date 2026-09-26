@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head(${product.name})}"></head>
+<body>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+
+<section class="pdp">
+    <div class="pdp-gallery reveal">
+        <div class="pdp-frame slot"
+             th:attr="data-tee=${#strings.toLowerCase(#strings.replace(product.name, 'ICONSI ', ''))}">
+            <img class="pdp-main" id="pdpMain" th:src="${product.primaryImage}" th:alt="${product.name}">
+        </div>
+        <div class="pdp-thumbs" th:if="${product.imageList.length > 1}">
+            <img th:each="url, i : ${product.imageList}" th:src="${url}" alt=""
+                 class="pdp-thumb" th:classappend="${i.index == 0} ? 'active' : ''"
+                 data-gallery-thumb>
+        </div>
+    </div>
+
+    <div class="pdp-info reveal">
+        <p class="eyebrow" th:text="${product.category}">Category</p>
+        <h1 th:text="${product.name}">Product</h1>
+        <p class="pdp-price" th:text="'R ' + ${#numbers.formatDecimal(product.price,1,2)}">R 0.00</p>
+        <p class="pdp-desc" th:text="${product.description}">Description</p>
+
+        <p class="stock" th:if="${product.stock > 0}"
+           th:text="'✓ ' + ${product.stock} + ' in stock'">In stock</p>
+        <p class="stock soldout-text" th:if="${product.stock == 0}">Sold out</p>
+
+        <form th:action="@{/cart/add}" method="post" class="pdp-actions" th:if="${product.stock > 0}">
+            <input type="hidden" name="productId" th:value="${product.id}">
+            <input type="number" name="quantity" value="1" min="1" th:max="${product.stock}">
+            <button class="btn btn-primary" type="submit">Add to cart</button>
+        </form>
+
+        <ul class="pdp-perks">
+            <li>Free shipping over R750</li>
+            <li>30-day easy returns</li>
+            <li>Secure checkout</li>
+        </ul>
+
+        <a class="back" th:href="@{/products}">← Back to shop</a>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-head"><h2>You may also like</h2></div>
+    <div class="grid">
+        <th:block th:each="p : ${related}">
+            <div th:replace="~{fragments/layout :: card(${p})}"></div>
+        </th:block>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
