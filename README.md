@@ -1,74 +1,90 @@
-# Iconsi — Spring Boot Storefront
+# ICONSI — Graphic Tee Storefront
 
-A production-grade, cinematic e-commerce storefront template built with **Spring Boot + Thymeleaf**, backed by **PostgreSQL**, deployed on **Render** with a **Neon** serverless database.
+A streetwear storefront for **ICONSI**, a bold Joburg label whose first collection is graphic T-shirts. It's built with **Spring Boot + Thymeleaf**, uses **PostgreSQL** in production, and deploys to **Render**.
 
-### 🔗 Live demo: **https://iconsi-store.onrender.com**
+![ICONSI campaign](src/main/resources/static/images/iconsi_campaign_studio.webp)
 
-> Free-tier hosting sleeps after ~15 min idle — the first load may take ~30–50s to wake, then it's instant.
-
-![Iconsi hero](src/main/resources/static/images/Gemini_Generated_Image_pm0oczpm0oczpm0o.jpeg)
+> *Wear your presence.* Graphic T-shirts with a point of view.
 
 ---
 
-## ✨ What it is
+## The collection
 
-A complete, rebrandable fashion storefront with an award-style front end and a secure, real backend — not a static mock. Everything from the catalogue to checkout to an admin panel works against a live database.
+One name, different energy. Every shirt carries a single ICONSI wordmark.
+
+| Blackout | Cream Statement | Forest | Cobalt |
+|---|---|---|---|
+| ![Blackout](src/main/resources/static/images/iconsi_tee_blackout.webp) | ![Cream Statement](src/main/resources/static/images/iconsi_tee_cream_statement.webp) | ![Forest](src/main/resources/static/images/iconsi_tee_forest.webp) | ![Cobalt](src/main/resources/static/images/iconsi_tee_cobalt.webp) |
+
+> Prices and stock in the local demo catalogue (R349 × 40) are placeholders, not confirmed product data.
+
+---
+
+## Features
+
+**Storefront**
+- The homepage runs from the "Wear your presence" hero to the tee colourways, a campaign feature, **The Edit** (an auto-advancing carousel) and the **Lookbook**
+- Colourway cards come from the live catalogue, with real prices and quick-add
+- Product pages with a thumbnail gallery and a hover image-swap
+- Session cart, checkout and order history
+
+**Motion** (dependency-free, CSP-safe, degrades without JS)
+- Cinematic load-in intro, reveal-on-scroll, a hero image trail, a headline decode and directional carousel transitions
+- Tee-colour placeholders if a product photo is ever missing
+
+**Accounts and admin**
+- Register, sign in and sign out; per-user order history; an admin dashboard for products and orders
+
+**Security**
+- Spring Security with default-deny, a role-gated admin area and per-user data isolation (IDOR-safe)
+- BCrypt passwords, login rate-limiting and CSRF protection
+- CSP, HSTS, Referrer-Policy and nosniff headers; no default credentials in production
+
+---
+
+## Design
 
 | | |
 |---|---|
-| ![Tweed edit](src/main/resources/static/images/a.jpeg) | ![Lookbook](src/main/resources/static/images/Gemini_Generated_Image_jas7cujas7cujas7.jpeg) |
-| ![Hoodie](src/main/resources/static/images/charcoal_hoodie_editorial.webp) | ![Sneakers](src/main/resources/static/images/minimalist_sneakers_flatlay.webp) |
+| Palette | Midnight navy `#091735` · Burnt orange `#ff641f` · Ivory `#f5f0e4` |
+| Type | Archivo (wide, heavy) for headings · Playfair Display for accent words · Inter for body text |
+| Imagery | Optimised `.webp` for mobile data (PNG masters kept alongside) |
+
+Design tokens live at the top of `src/main/resources/static/css/style.css`.
 
 ---
 
-## 🚀 Features
-
-**Storefront**
-- Cinematic hero, "Shop by collection" cards, featured grid, an auto-advancing **"The Edit"** showcase slider, and a feature-led editorial **Lookbook**
-- Interactive product pages (thumbnail gallery, hover image-swap, quick-add)
-- Session cart · checkout · order history
-
-**Motion (all original, dependency-free, CSP-safe, degrades without JS)**
-- Cinematic load-in intro · long-body stretch cursor · hero image-trail · scroll-driven crossfading background · hero text-decode · directional showcase transitions
-
-**Commerce & accounts**
-- Register / sign in / sign out · per-user order history · admin dashboard with product & order management
-
-**Security**
-- Spring Security, default-deny, role-gated admin, **per-user data isolation** (IDOR-safe)
-- BCrypt passwords · **login rate-limiting** (brute-force guard) · CSRF on
-- CSP, HSTS, Referrer-Policy, nosniff headers · no default credentials in production
-
----
-
-## 🧱 Tech stack
+## Tech stack
 
 - **Spring Boot 4** (Java 21), Spring MVC + **Thymeleaf**
-- **Spring Data JPA** + **PostgreSQL** (H2 in local dev)
+- **Spring Data JPA**: H2 in local dev, **PostgreSQL** (Neon) in production
 - **Spring Security** (form login, BCrypt, roles)
-- **Docker** · **Render** (host) · **Neon** (database)
+- **Docker** and **Render**
 
 ---
 
-## 🖥️ Run locally
+## Run locally
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-Open http://localhost:8080. Local dev uses an in-memory H2 database with demo data and demo accounts (`admin@example.com` / `admin123`, `demo@example.com` / `demo123`) — these exist **only** in dev.
+Open http://localhost:8080. Local dev uses an in-memory H2 database seeded with the four tees and two demo accounts: `admin@example.com` / `admin123` and `demo@example.com` / `demo123`. These accounts exist **only** in dev.
 
-## ☁️ Deploy
+## Deploy
 
-See **[DEPLOY.md](DEPLOY.md)** for Render + Neon/Postgres setup. In production the app runs the `prod` profile: Postgres from env vars, no demo data, secure cookies, and the first admin bootstrapped from `ADMIN_EMAIL` / `ADMIN_PASSWORD`.
+See **[DEPLOY.md](DEPLOY.md)** for the Render and Neon/Postgres setup. Production runs the `prod` profile: Postgres from environment variables, no demo data, secure cookies, and a first admin created from `ADMIN_EMAIL` / `ADMIN_PASSWORD`.
 
-## 🎨 Make it yours
+To keep the free Render instance awake, set the repository variable `SITE_URL` to the deployed URL. `.github/workflows/keep-alive.yml` pings it every 10 minutes and does nothing while the variable isn't set.
 
-- **Brand / tagline** → `store.brand-name`, `store.tagline` in `application.properties`
-- **Catalogue** → the admin panel at `/admin/products`, or `DataSeeder.java`
-- **Look & feel** → CSS variables at the top of `static/css/style.css`
-- **Images** → drop files in `static/images/` and reference them
+## Customise
+
+- **Brand and tagline:** `store.brand-name` and `store.tagline` in `application.properties`
+- **Catalogue:** the admin panel at `/admin/products`, or `DataSeeder.java` for dev data
+- **Images:** `src/main/resources/static/images/`. Use `.webp` for anything the site serves.
 
 ---
 
-*This is a template — swap the placeholder brand, copy, and imagery for your own.*
+## Credits
+
+The Fox Street, Johannesburg photograph in the lookbook is by **Adamina**, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Johannesburg_Fox_Street_01.jpg), licensed [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/). The ICONSI tee and campaign imagery is original to the project.
